@@ -13,7 +13,6 @@ jobs:
     uses: Davvos11/.github/.github/workflows/k8s-deploy.yml@v1
     with:
       app: slack-spotify-preview
-      # rollout: ""   # CronJob-only app: no Deployment to wait for
     permissions:
       contents: read
       packages: write
