@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: slack-spotify-preview
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      component: worker
+  template:
+    metadata:
+      labels:
+        component: worker
+    spec:
+      containers:
+        - name: app
+          image: app # replaced by kustomize
+          envFrom:
+            - secretRef:
+                name: slack-spotify-preview-env
+                optional: false # tokens are required
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+      # Only for private GHCR images (ghcr_pull_secret = true in infra-tg):
+      # imagePullSecrets:
+      #   - name: ghcr-pull

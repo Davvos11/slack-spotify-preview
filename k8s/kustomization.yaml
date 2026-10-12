@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# The namespace, its RBAC and the <app>-env Secret are managed by infra-tg (Terragrunt).
+namespace: slack-spotify-preview
+
+resources:
+  - deployment.yaml # worker (Slack Socket Mode): no Service or HTTPRoute
+
+labels:
+  - pairs:
+      app.kubernetes.io/name: slack-spotify-preview
+    includeSelectors: true
+
+# The deploy job sets newTag to the commit SHA (kustomize edit set image).
+images:
+  - name: app
+    newName: ghcr.io/davvos11/slack-spotify-preview
+    newTag: latest

@@ -1,0 +1,19 @@
+name: build and deploy
+
+# Build → GHCR → deploy with this repo's ARC runner. Logic lives in the shared workflow:
+# https://github.com/Davvos11/.github/blob/master/.github/workflows/k8s-deploy.yml
+# No pull_request trigger: the deploy job runs on a self-hosted runner in the cluster.
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    uses: Davvos11/.github/.github/workflows/k8s-deploy.yml@v1
+    with:
+      app: slack-spotify-preview
+      # rollout: ""   # CronJob-only app: no Deployment to wait for
+    permissions:
+      contents: read
+      packages: write
