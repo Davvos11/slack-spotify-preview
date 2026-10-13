@@ -13,7 +13,8 @@ app = App(
     token=os.environ.get("SLACK_BOT_TOKEN"),
 )
 
-SPOTIFY_REGEX = r"<(https:\/\/open\.spotify\.com\/\S+)>"
+# Slack wraps links as <url> or <url|label>: stop the URL at "|", ">" or whitespace.
+SPOTIFY_REGEX = r"<(https:\/\/open\.spotify\.com\/[^\s|>]+)(?:\|[^>]*)?>"
 
 
 @app.event("message")
