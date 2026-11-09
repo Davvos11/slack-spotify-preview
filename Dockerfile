@@ -4,7 +4,8 @@ WORKDIR /code
 
 COPY pyproject.toml uv.lock ./
 
-RUN ["uv", "sync", "--locked"]
+# uv doesn't use pip, and scanners flag the packages the base image's pip vendors
+RUN uv sync --locked && python -m pip uninstall -y pip
 
 COPY . .
 
